@@ -2745,8 +2745,8 @@ export function resolvePackageManagerUserAgent(packageManager: string): string {
 
 export function resolveDesktopProductName(version: string): string {
   return resolveDesktopUpdateChannel(version) === "nightly"
-    ? "T3 Code (Nightly)"
-    : (desktopPackageJson.productName ?? "T3 Code");
+    ? "Lilym Code (Nightly)"
+    : (desktopPackageJson.productName ?? "Lilym Code");
 }
 
 export const createBuildConfig = Effect.fn("createBuildConfig")(function* (
@@ -2840,7 +2840,7 @@ export const createBuildConfig = Effect.fn("createBuildConfig")(function* (
       },
       protocols: [
         {
-          name: "T3 Code",
+          name: "Lilym Code",
           schemes: ["t3code", "t3code-dev"],
         },
         // Lets people choose T3 Code as their default web browser, which opens
@@ -2907,7 +2907,7 @@ export const createBuildConfig = Effect.fn("createBuildConfig")(function* (
       // t3code:// OAuth callbacks to the app.
       protocols: [
         {
-          name: "T3 Code",
+          name: "Lilym Code",
           schemes: ["t3code", "t3code-dev"],
         },
       ],

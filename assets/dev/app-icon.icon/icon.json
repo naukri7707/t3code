@@ -6,40 +6,22 @@
     {
       "layers": [
         {
-          "glass": true,
-          "image-name": "text.svg",
-          "name": "Text",
-          "position": {
-            "scale": 8.5,
-            "translation-in-points": [0, 0]
-          }
-        },
-        {
+          "image-name": "icon.png",
+          "name": "Artwork",
           "glass": false,
-          "image-name": "annotations.svg",
-          "name": "Annotations",
           "position": {
-            "scale": 8.5,
-            "translation-in-points": [0, 0]
-          }
-        },
-        {
-          "glass": true,
-          "image-name": "background.svg",
-          "name": "Background",
-          "position": {
-            "scale": 8.1,
+            "scale": 1,
             "translation-in-points": [0, 0]
           }
         }
       ],
+      "translucency": {
+        "enabled": false,
+        "value": 0
+      },
       "shadow": {
         "kind": "neutral",
-        "opacity": 0.6
-      },
-      "translucency": {
-        "enabled": true,
-        "value": 0.2
+        "opacity": 0
       }
     }
   ],
