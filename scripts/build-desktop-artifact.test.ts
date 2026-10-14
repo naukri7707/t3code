@@ -337,13 +337,70 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
     }),
   );
 
+  it.effect(
+    "disables unsigned macOS updates while preserving signed and other platform feeds",
+    () =>
+      Effect.gen(function* () {
+        for (const version of ["1.2.3", "1.2.3-nightly.20261014.1"]) {
+          for (const mockUpdates of [false, true]) {
+            const unsigned = yield* createBuildConfig(
+              "mac",
+              "dmg",
+              version,
+              false,
+              mockUpdates,
+              undefined,
+              undefined,
+            );
+            assert.notProperty(unsigned, "publish");
+          }
+          const signed = yield* createBuildConfig(
+            "mac",
+            "dmg",
+            version,
+            true,
+            false,
+            undefined,
+            undefined,
+          );
+          const expectedFeed = yield* resolveGitHubPublishConfig(
+            resolveDesktopUpdateChannel(version),
+          );
+          assert.deepStrictEqual(signed.publish, [expectedFeed]);
+          for (const [platform, target] of [
+            ["win", "nsis"],
+            ["linux", "AppImage"],
+          ] as const) {
+            const config = yield* createBuildConfig(
+              platform,
+              target,
+              version,
+              false,
+              false,
+              undefined,
+              undefined,
+            );
+            assert.deepStrictEqual(config.publish, [expectedFeed]);
+          }
+        }
+      }).pipe(
+        Effect.provide(
+          ConfigProvider.layer(
+            ConfigProvider.fromEnv({
+              env: { T3CODE_DESKTOP_UPDATE_REPOSITORY: "example/desktop" },
+            }),
+          ),
+        ),
+      ),
+  );
+
   it.effect("omits update feeds for pull request preview builds", () =>
     Effect.gen(function* () {
       const preview = yield* createBuildConfig(
         "mac",
         "dmg",
         "0.0.33-pr.8182.1",
-        false,
+        true,
         false,
         undefined,
         undefined,
@@ -352,7 +409,7 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
         "mac",
         "dmg",
         "0.0.33",
-        false,
+        true,
         false,
         undefined,
         undefined,
@@ -362,7 +419,7 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
         "mac",
         "dmg",
         "0.0.41-preview.20260912.1589",
-        false,
+        true,
         false,
         undefined,
         undefined,

@@ -2799,7 +2799,8 @@ export const createBuildConfig = Effect.fn("createBuildConfig")(function* (
     ],
   };
   const updateChannel = resolveDesktopUpdateChannel(version);
-  if (!isDesktopPreviewVersion(version)) {
+  // Squirrel.Mac requires a signed app; omit the feed for unsigned manual installs.
+  if (!isDesktopPreviewVersion(version) && (platform !== "mac" || signed)) {
     const publishConfig = yield* resolveGitHubPublishConfig(updateChannel);
     if (publishConfig) {
       buildConfig.publish = [publishConfig];
